@@ -12,12 +12,14 @@ class TodosController < ApplicationController
   
     def create
         if (todos_params[:project_id].empty?)
-            Todo.create(text: todos_params[:text], isCompleted: false, project_id: todos_params[:project_id])
-          else
-            project = Project.create(title:params[:title])
+	    project = Project.create(title: todos_params[:title])
             Todo.create(text: todos_params[:text], isCompleted: false, project_id: project["id"])
-          end
-        render :json => todo
+	    project = Project.find(project["id"])
+  	    render :json => project
+          else
+            todo = Todo.create(text: todos_params[:text], isCompleted: false, project_id: todos_params[:project_id])
+            render :json => todo  
+	  end
     end
 
     private
