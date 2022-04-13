@@ -23,6 +23,6 @@ class TodosController < ApplicationController
 
     private
         def todos_params
-            params.permit(:project_id,:title,:text)
+            params.permit(:project_id,:title,:id,:text)
         end
   end
