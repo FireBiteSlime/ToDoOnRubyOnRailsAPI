@@ -5,19 +5,20 @@ class TodosController < ApplicationController
     def update
         project = Project.find(todos_params[:project_id])
         todo = project.todos.find(todos_params[:id])
-		todo.isCompleted = !todo.isCompleted
-		todo.save
-		render :json => todo
+		    todo.isCompleted = !todo.isCompleted
+	    	todo.save
+		    render :json => todo
     end
   
     def create
-        if (todos_params[:project_id].empty?)
-            Todo.create(text: todos_params[:text], isCompleted: false, project_id: todos_params[:project_id])
-          else
-            project = Project.create(title:params[:title])
-            Todo.create(text: todos_params[:text], isCompleted: false, project_id: project["id"])
-          end
-        render :json => todo
+        if (todos_params[:project_id] < 0)
+          project = Project.create(title: todos_params[:title])
+          Todo.create(text: todos_params[:text], isCompleted: false, project_id: project["id"])
+          render :json => project.to_json( :include => [:todos] )
+        else
+          todo = Todo.create(text: todos_params[:text], isCompleted: false, project_id: todos_params[:project_id])
+          render :json => todo
+        end
     end
 
     private
