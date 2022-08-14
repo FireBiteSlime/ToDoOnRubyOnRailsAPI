@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 2022_03_28_210957) do
   create_table "todos", force: :cascade do |t|
     t.text "text"
     t.boolean "isCompleted"
-    t.bigint "project_id", null: false
+    t.bigint "project_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["project_id"], name: "index_todos_on_project_id"

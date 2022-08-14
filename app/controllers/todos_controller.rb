@@ -11,13 +11,21 @@ class TodosController < ApplicationController
     end
   
     def create
-        if (todos_params[:project_id] < 0)
-          project = Project.create(title: todos_params[:title])
-          Todo.create(text: todos_params[:text], isCompleted: false, project_id: project["id"])
-          render :json => project.to_json( :include => [:todos] )
+        project = Project.create(title: todos_params[:title])
+        if (project.valid?)
+          todo = Todo.create(text: todos_params[:text], isCompleted: false, project_id: project["id"])
+          if (todo.valid?)
+            render :json => project.to_json( :include => [:todos] )
+          else
+            render :json => todo.errors.full_messages
+          end
         else
           todo = Todo.create(text: todos_params[:text], isCompleted: false, project_id: todos_params[:project_id])
-          render :json => todo
+          if (todo.valid?)
+            render :json => todo
+          else
+            render :json => todo.errors.full_messages
+          end
         end
     end
 
@@ -25,4 +33,4 @@ class TodosController < ApplicationController
         def todos_params
             params.permit(:project_id,:title,:id,:text)
         end
-  end
+end
